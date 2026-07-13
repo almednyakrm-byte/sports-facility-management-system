@@ -1,0 +1,107 @@
+CREATE TABLE users (
+  id INT AUTO_INCREMENT,
+  username VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('guest', 'user', 'admin') NOT NULL DEFAULT 'guest',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY (email)
+);
+
+CREATE TABLE members (
+  id INT AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(20) NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE events (
+  id INT AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  date DATE NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE courses (
+  id INT AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  duration INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE gym_management (
+  id INT AUTO_INCREMENT,
+  note TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE user_members (
+  id INT AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  member_id INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (member_id) REFERENCES members(id)
+);
+
+CREATE TABLE user_events (
+  id INT AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  event_id INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (event_id) REFERENCES events(id)
+);
+
+CREATE TABLE user_courses (
+  id INT AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  course_id INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (course_id) REFERENCES courses(id)
+);
+
+CREATE TABLE user_gym_management (
+  id INT AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  gym_management_id INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (gym_management_id) REFERENCES gym_management(id)
+);
+
+INSERT INTO users (username, email, password, role)
+VALUES ('admin', 'admin@example.com', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 'admin');
+
+INSERT INTO members (name, phone)
+VALUES ('Member 1', '0123456789');
+
+INSERT INTO events (name, description, date)
+VALUES ('Event 1', 'This is event 1', '2024-01-01');
+
+INSERT INTO courses (name, description, duration)
+VALUES ('Course 1', 'This is course 1', 10);
+
+INSERT INTO gym_management (note)
+VALUES ('Note 1');
